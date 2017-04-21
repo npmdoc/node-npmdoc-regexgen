@@ -1,0 +1,436 @@
+<div class="apidocDiv">
+<style>
+/*csslint
+*/
+.apidocDiv {
+    background: #fff;
+    font-family: Arial, Helvetica, sans-serif;
+}
+.apidocDiv a[href] {
+    color: #33f;
+    font-weight: bold;
+    text-decoration: none;
+}
+.apidocDiv a[href]:hover {
+    text-decoration: underline;
+}
+.apidocCodeCommentSpan {
+    background: #bbf;
+    color: #000;
+    display: block;
+}
+.apidocCodeKeywordSpan {
+    color: #d00;
+    font-weight: bold;
+}
+.apidocCodePre {
+    background: #eef;
+    border: 1px solid;
+    color: #777;
+    padding: 5px;
+    white-space: pre-wrap;
+}
+.apidocFooterDiv {
+    margin-top: 20px;
+    text-align: center;
+}
+.apidocModuleLi {
+    margin-top: 10px;
+}
+.apidocSectionDiv {
+    border-top: 1px solid;
+    margin-top: 20px;
+}
+.apidocSignatureSpan {
+    color: #777;
+    font-weight: bold;
+}
+</style>
+<h1>api documentation for
+    <a
+
+        href="https://github.com/devongovett/regexgen#readme"
+
+    >regexgen (v1.2.3)</a>
+</h1>
+<h4>Generate regular expressions that match a set of strings</h4>
+<div class="apidocSectionDiv"><a
+    href="#apidoc.tableOfContents"
+    id="apidoc.tableOfContents"
+><h1>table of contents</h1></a><ol>
+
+    <li class="apidocModuleLi"><a href="#apidoc.module.regexgen">module regexgen</a><ol>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.regexgen.regexgen">
+            function <span class="apidocSignatureSpan"></span>regexgen
+            <span class="apidocSignatureSpan">(inputs, flags)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.regexgen.Trie">
+            function <span class="apidocSignatureSpan">regexgen.</span>Trie
+            <span class="apidocSignatureSpan">()</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <span class="apidocSignatureSpan">object <span class="apidocSignatureSpan">regexgen.</span>ast</span>
+
+        </li>
+
+    </ol></li>
+
+    <li class="apidocModuleLi"><a href="#apidoc.module.regexgen.ast">module regexgen.ast</a><ol>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.regexgen.ast.Alternation">
+            function <span class="apidocSignatureSpan">regexgen.ast.</span>Alternation
+            <span class="apidocSignatureSpan">(...options)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.regexgen.ast.CharClass">
+            function <span class="apidocSignatureSpan">regexgen.ast.</span>CharClass
+            <span class="apidocSignatureSpan">(a, b)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.regexgen.ast.Concatenation">
+            function <span class="apidocSignatureSpan">regexgen.ast.</span>Concatenation
+            <span class="apidocSignatureSpan">(a, b)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.regexgen.ast.Literal">
+            function <span class="apidocSignatureSpan">regexgen.ast.</span>Literal
+            <span class="apidocSignatureSpan">(value)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.regexgen.ast.Repetition">
+            function <span class="apidocSignatureSpan">regexgen.ast.</span>Repetition
+            <span class="apidocSignatureSpan">(expr, type)</span>
+            </a>
+
+        </li>
+
+    </ol></li>
+
+</ol></div>
+
+<div class="apidocSectionDiv">
+<h1><a href="#apidoc.module.regexgen" id="apidoc.module.regexgen">module regexgen</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.regexgen.regexgen" id="apidoc.element.regexgen.regexgen">
+        function <span class="apidocSignatureSpan"></span>regexgen
+        <span class="apidocSignatureSpan">(inputs, flags)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">function regexgen(inputs, flags) {
+  let trie = new Trie;
+  trie.addAll(inputs);
+  return trie.toRegExp(flags);
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.regexgen.Trie" id="apidoc.element.regexgen.Trie">
+        function <span class="apidocSignatureSpan">regexgen.</span>Trie
+        <span class="apidocSignatureSpan">()</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">class Trie {
+  constructor() {
+    this.alphabet = new Set;
+    this.root = new State;
+  }
+
+<span class="apidocCodeCommentSpan">  /**
+   * Adds the given string to the trie.
+   * @param {string} string - the string to add
+   */
+</span>  add(string) {
+    let node = this.root;
+    for (let char of string) {
+      this.alphabet.add(char);
+      node = node.transitions.get(char);
+    }
+
+    node.accepting = true;
+  }
+
+  /**
+   * Adds the given array of strings to the trie.
+   * @param {Array&#x3c;string&#x3e;} strings - the array of strings to add
+   */
+  addAll(strings) {
+    for (let string of strings) {
+      this.add(string);
+    }
+  }
+
+  /**
+   * Returns a minimal DFA representing the strings in the trie.
+   * @return {State} - the starting state of the minimal DFA
+   */
+  minimize() {
+    return minimize(this.root);
+  }
+
+  /**
+   * Returns a regex pattern that matches the strings in the trie.
+   * @return {string} pattern - The regex pattern.
+   */
+  toString() {
+    return toRegex(this.minimize());
+  }
+
+  /**
+   * Returns a regex that matches the strings in the trie.
+   * @param {string} flags - The flags to add to the regex.
+   * @return {RegExp}
+   */
+  toRegExp(flags) {
+    return new RegExp(this.toString(), flags);
+  }
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+
+
+</div>
+
+<div class="apidocSectionDiv">
+<h1><a href="#apidoc.module.regexgen.ast" id="apidoc.module.regexgen.ast">module regexgen.ast</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.regexgen.ast.Alternation" id="apidoc.element.regexgen.ast.Alternation">
+        function <span class="apidocSignatureSpan">regexgen.ast.</span>Alternation
+        <span class="apidocSignatureSpan">(...options)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">class Alternation {
+  constructor(...options) {
+    this.precedence = 1;
+    this.options = this.flatten(options);
+    this.options.sort((a, b) =&#x3e; b.length - a.length);
+  }
+
+  flatten(options) {
+    return options.reduce((res, option) =&#x3e; res.concat(
+      option instanceof Alternation ? this.flatten(option.options) : option
+    ), []);
+  }
+
+  toString() {
+    return this.options.map(o =&#x3e; parens(o, this)).join(&#x27;|&#x27;);
+  }
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.regexgen.ast.CharClass" id="apidoc.element.regexgen.ast.CharClass">
+        function <span class="apidocSignatureSpan">regexgen.ast.</span>CharClass
+        <span class="apidocSignatureSpan">(a, b)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">class CharClass {
+  constructor(a, b) {
+    this.precedence = 1;
+    this.set = regenerate(a, b);
+  }
+
+  get length() {
+    return 1;
+  }
+
+  toString() {
+    return this.set.toString();
+  }
+
+  getCharClass() {
+    return this.set;
+  }
+
+  get isSingleCharacter() {
+    return !this.set.toArray().some(c =&#x3e; c &#x3e; 0xffff);
+  }
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.regexgen.ast.Concatenation" id="apidoc.element.regexgen.ast.Concatenation">
+        function <span class="apidocSignatureSpan">regexgen.ast.</span>Concatenation
+        <span class="apidocSignatureSpan">(a, b)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">class Concatenation {
+  constructor(a, b) {
+    this.precedence = 2;
+    this.a = a;
+    this.b = b;
+  }
+
+  get length() {
+    return this.a.length + this.b.length;
+  }
+
+  toString() {
+    return parens(this.a, this) + parens(this.b, this);
+  }
+
+  getLiteral(side) {
+    if (side === &#x27;start&#x27; &#x26;&#x26; this.a.getLiteral) {
+      return this.a.getLiteral(side);
+    }
+
+    if (side === &#x27;end&#x27; &#x26;&#x26; this.b.getLiteral) {
+      return this.b.getLiteral(side);
+    }
+  }
+
+  removeSubstring(side, len) {
+    let {a, b} = this;
+    if (side === &#x27;start&#x27; &#x26;&#x26; a.removeSubstring) {
+      a = a.removeSubstring(side, len);
+    }
+
+    if (side === &#x27;end&#x27; &#x26;&#x26; b.removeSubstring) {
+      b = b.removeSubstring(side, len);
+    }
+
+    return a.isEmpty ? b : b.isEmpty ? a : new Concatenation(a, b);
+  }
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.regexgen.ast.Literal" id="apidoc.element.regexgen.ast.Literal">
+        function <span class="apidocSignatureSpan">regexgen.ast.</span>Literal
+        <span class="apidocSignatureSpan">(value)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">class Literal {
+  constructor(value) {
+    this.precedence = 2;
+    this.value = value;
+  }
+
+  get isEmpty() {
+    return !this.value;
+  }
+
+  get isSingleCharacter() {
+    return this.length === 1;
+  }
+
+  get length() {
+    return this.value.length;
+  }
+
+  toString() {
+    return jsesc(this.value).replace(/([\t\n\f\r\$\(\)\*\+\-\.\?\[\]\^\{\|\}])/g, &#x27;\\$1&#x27;);
+  }
+
+  getCharClass() {
+    if (Array.from(this.value).length === 1) {
+      return this.value;
+    }
+  }
+
+  getLiteral() {
+    return this.value;
+  }
+
+  removeSubstring(side, len) {
+    if (side === &#x27;start&#x27;) {
+      return new Literal(this.value.slice(len));
+    }
+
+    if (side === &#x27;end&#x27;) {
+      return new Literal(this.value.slice(0, this.value.length - len));
+    }
+  }
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.regexgen.ast.Repetition" id="apidoc.element.regexgen.ast.Repetition">
+        function <span class="apidocSignatureSpan">regexgen.ast.</span>Repetition
+        <span class="apidocSignatureSpan">(expr, type)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">class Repetition {
+  constructor(expr, type) {
+    this.precedence = 3;
+    this.expr = expr;
+    this.type = type;
+  }
+
+  get length() {
+    return this.expr.length;
+  }
+
+  toString() {
+    return parens(this.expr, this) + this.type;
+  }
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+</div>
+
+<div class="apidocFooterDiv">
+    [ this document was created with
+    <a href="https://github.com/kaizhu256/node-utility2" target="_blank">utility2</a>
+    ]
+</div>
+</div>

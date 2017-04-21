@@ -1,0 +1,18 @@
+<svg height="238" width="720" xmlns="http://www.w3.org/2000/svg">
+<rect height="238" fill="#555" width="720"></rect>
+<text fill="#7f7" font-family="Courier New" font-size="12" xml:space="preserve">
+<tspan x="10" y="26">  0.  2017-04-21 09:08:51 +0000    20238 bytes  .</tspan>
+<tspan x="10" y="42">  1.  2017-04-21 09:08:51 +0000     2257 bytes  README.md</tspan>
+<tspan x="10" y="58">  2.  2017-04-21 09:08:51 +0000      335 bytes  bin/cli.js</tspan>
+<tspan x="10" y="74">  3.  2017-04-21 09:08:51 +0000      359 bytes  index.js</tspan>
+<tspan x="10" y="90">  4.  2017-04-21 09:08:51 +0000      903 bytes  package.json</tspan>
+<tspan x="10" y="106">  5.  2017-04-21 09:08:51 +0000     3193 bytes  src/ast.js</tspan>
+<tspan x="10" y="122">  6.  2017-04-21 09:08:51 +0000      594 bytes  src/map.js</tspan>
+<tspan x="10" y="138">  7.  2017-04-21 09:08:51 +0000     2073 bytes  src/minimize.js</tspan>
+<tspan x="10" y="154">  8.  2017-04-21 09:08:51 +0000     4587 bytes  src/regex.js</tspan>
+<tspan x="10" y="170">  9.  2017-04-21 09:08:51 +0000     1036 bytes  src/set.js</tspan>
+<tspan x="10" y="186"> 10.  2017-04-21 09:08:51 +0000      510 bytes  src/state.js</tspan>
+<tspan x="10" y="202"> 11.  2017-04-21 09:08:51 +0000     1490 bytes  src/trie.js</tspan>
+<tspan x="10" y="218"> 12.  2017-04-21 09:08:51 +0000     2901 bytes  test/test.js</tspan>
+</text>
+</svg>
